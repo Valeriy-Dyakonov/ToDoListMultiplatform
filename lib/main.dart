@@ -181,7 +181,7 @@ class _LoginWidget extends State<LoginWidget> {
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(
                   child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 150, 16, 16),
+                      padding: const EdgeInsets.fromLTRB(16, 150, 16, 8),
                       child: TextField(
                         controller: loginController,
                         autofocus: false,
@@ -215,7 +215,7 @@ class _LoginWidget extends State<LoginWidget> {
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(
                   child: Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                       child: TextField(
                         controller: passwordController,
                         autofocus: false,
@@ -250,7 +250,7 @@ class _LoginWidget extends State<LoginWidget> {
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(
                   child: Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                       child: TextField(
                         controller: repeatPasswordController,
                         autofocus: false,
@@ -354,7 +354,7 @@ class _LoginWidget extends State<LoginWidget> {
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(
                   child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 150, 16, 16),
+                      padding: const EdgeInsets.fromLTRB(16, 150, 16, 8),
                       child: TextField(
                         controller: loginController,
                         autofocus: false,
@@ -388,7 +388,7 @@ class _LoginWidget extends State<LoginWidget> {
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(
                   child: Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                       child: TextField(
                         controller: passwordController,
                         autofocus: false,
@@ -441,59 +441,53 @@ class _LoginWidget extends State<LoginWidget> {
       }
     } else {
       if (_selectedIndex == 1) {
-        var horizontalSign = Column(
+        var horizontalRegister = Column(
           children: [
-            Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-              Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text('Welcome',
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                        fontSize: 64,
-                        color: CustomColors.primaryColor,
-                        shadows: <Shadow>[
-                          Shadow(
-                            offset: const Offset(0.0, 2.0),
-                            blurRadius: 10.0,
-                            color: CustomColors.colorHighlight,
-                          ),
-                        ],
-                      )))
+            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+              Flexible(
+                  flex: 1,
+                  child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16.0, 0, 64, 4.0),
+                      child: Text('Welcome',
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                            fontSize: 64,
+                            color: CustomColors.primaryColor,
+                            shadows: <Shadow>[
+                              Shadow(
+                                offset: const Offset(0.0, 2.0),
+                                blurRadius: 10.0,
+                                color: CustomColors.colorHighlight,
+                              ),
+                            ],
+                          ))))
             ]),
             Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-              Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: Text('Time is money',
-                      style: TextStyle(
-                          fontSize: 20, color: CustomColors.primaryColor)))
-            ]),
-            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-              Padding(
-                  padding: const EdgeInsets.only(top: 65),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: Size(130, 46),
-                        primary: CustomColors.colorHighlight,
-                        textStyle: const TextStyle(fontSize: 20),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.horizontal(left: Radius.circular(8)),
-                        )),
-                    onPressed: () {},
-                    child: const Text('Register'),
-                  ))
+              Flexible(
+                  flex: 1,
+                  child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                      child: Text('Time is money',
+                          style: TextStyle(
+                              fontSize: 20, color: CustomColors.primaryColor))))
             ]),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(
                   child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 150, 16, 16),
+                      padding: const EdgeInsets.fromLTRB(200, 0, 200, 4),
                       child: TextField(
+                        controller: loginController,
                         autofocus: false,
                         style: TextStyle(
                             fontSize: 22.0, color: CustomColors.primaryColor),
                         decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
+                            errorStyle: TextStyle(fontSize: 16, height: 0.6),
+                            errorText: loginValid,
+                            suffixIcon: loginValid == null
+                                ? null
+                                : Icon(Icons.error, color: Colors.red),
                             hintText: 'Login',
                             contentPadding: const EdgeInsets.only(
                                 left: 14.0, bottom: 8.0, top: 8.0),
@@ -514,8 +508,9 @@ class _LoginWidget extends State<LoginWidget> {
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(
                   child: Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.fromLTRB(200, 4, 200, 4),
                       child: TextField(
+                        controller: passwordController,
                         autofocus: false,
                         obscureText: true,
                         style: TextStyle(
@@ -523,6 +518,11 @@ class _LoginWidget extends State<LoginWidget> {
                         decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
+                            errorStyle: TextStyle(fontSize: 16, height: 0.6),
+                            errorText: passwordValid,
+                            suffixIcon: passwordValid == null
+                                ? null
+                                : Icon(Icons.error, color: Colors.red),
                             hintText: 'Password',
                             contentPadding: const EdgeInsets.only(
                                 left: 14.0, bottom: 8.0, top: 8.0),
@@ -541,77 +541,127 @@ class _LoginWidget extends State<LoginWidget> {
                       )))
             ]),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: Size(200, 46),
-                        primary: CustomColors.secondaryColor,
-                        textStyle: const TextStyle(fontSize: 20),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                        )),
-                    onPressed: () {},
-                    child: const Text('Sign In'),
-                  ))
+              Expanded(
+                  child: Padding(
+                      padding: const EdgeInsets.fromLTRB(200, 4, 200, 4),
+                      child: TextField(
+                        controller: repeatPasswordController,
+                        autofocus: false,
+                        obscureText: true,
+                        style: TextStyle(
+                            fontSize: 22.0, color: CustomColors.primaryColor),
+                        decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            errorStyle: TextStyle(fontSize: 16, height: 0.6),
+                            errorText: repeatPasswordValid,
+                            suffixIcon: repeatPasswordValid == null
+                                ? null
+                                : Icon(Icons.error, color: Colors.red),
+                            hintText: 'Repeat password',
+                            contentPadding: const EdgeInsets.only(
+                                left: 14.0, bottom: 8.0, top: 8.0),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: CustomColors.secondaryColor,
+                                  width: 2.0),
+                              borderRadius: BorderRadius.circular(8.0),
+                            )),
+                      ))),
+            ]),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Flexible(
+                  flex: 1,
+                  child: Padding(
+                      padding: const EdgeInsets.fromLTRB(200, 8, 8, 8),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            minimumSize: Size(200, 46),
+                            primary: CustomColors.primaryColor,
+                            textStyle: const TextStyle(fontSize: 20),
+                            shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8)),
+                            )),
+                        onPressed: () {
+                          _onItemTapped(0);
+                        },
+                        child: const Text('Sign In'),
+                      ))),
+              Flexible(
+                  flex: 1,
+                  child: Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 8, 200, 8),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            minimumSize: Size(200, 46),
+                            primary: CustomColors.colorHighlight,
+                            textStyle: const TextStyle(fontSize: 20),
+                            shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8)),
+                            )),
+                        onPressed: () {},
+                        child: const Text('Register'),
+                      ))),
             ])
           ],
         );
-        return horizontalSign;
+        return horizontalRegister;
       } else {
         var horizontalSign = Column(
           children: [
-            Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-              Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text('Welcome',
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                        fontSize: 64,
-                        color: CustomColors.primaryColor,
-                        shadows: <Shadow>[
-                          Shadow(
-                            offset: const Offset(0.0, 2.0),
-                            blurRadius: 10.0,
-                            color: CustomColors.colorHighlight,
-                          ),
-                        ],
-                      )))
+            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+              Flexible(
+                  flex: 1,
+                  child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16.0, 0, 64, 4.0),
+                      child: Text('Welcome',
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                            fontSize: 64,
+                            color: CustomColors.primaryColor,
+                            shadows: <Shadow>[
+                              Shadow(
+                                offset: const Offset(0.0, 2.0),
+                                blurRadius: 10.0,
+                                color: CustomColors.colorHighlight,
+                              ),
+                            ],
+                          ))))
             ]),
             Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-              Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: Text('Time is money',
-                      style: TextStyle(
-                          fontSize: 20, color: CustomColors.primaryColor)))
-            ]),
-            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-              Padding(
-                  padding: const EdgeInsets.only(top: 65),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: Size(130, 46),
-                        primary: CustomColors.colorHighlight,
-                        textStyle: const TextStyle(fontSize: 20),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.horizontal(left: Radius.circular(8)),
-                        )),
-                    onPressed: () {},
-                    child: const Text('Register'),
-                  ))
+              Flexible(
+                  flex: 1,
+                  child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                      child: Text('Time is money',
+                          style: TextStyle(
+                              fontSize: 20, color: CustomColors.primaryColor))))
             ]),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(
                   child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 150, 16, 16),
+                      padding: const EdgeInsets.fromLTRB(200, 32, 200, 4),
                       child: TextField(
+                        controller: loginController,
                         autofocus: false,
                         style: TextStyle(
                             fontSize: 22.0, color: CustomColors.primaryColor),
                         decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
+                            errorStyle: TextStyle(fontSize: 16, height: 0.6),
+                            errorText: loginValid,
+                            suffixIcon: loginValid == null
+                                ? null
+                                : Icon(Icons.error, color: Colors.red),
                             hintText: 'Login',
                             contentPadding: const EdgeInsets.only(
                                 left: 14.0, bottom: 8.0, top: 8.0),
@@ -632,8 +682,9 @@ class _LoginWidget extends State<LoginWidget> {
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(
                   child: Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.fromLTRB(200, 4, 200, 4),
                       child: TextField(
+                        controller: passwordController,
                         autofocus: false,
                         obscureText: true,
                         style: TextStyle(
@@ -641,6 +692,11 @@ class _LoginWidget extends State<LoginWidget> {
                         decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
+                            errorStyle: TextStyle(fontSize: 16, height: 0.6),
+                            errorText: passwordValid,
+                            suffixIcon: passwordValid == null
+                                ? null
+                                : Icon(Icons.error, color: Colors.red),
                             hintText: 'Password',
                             contentPadding: const EdgeInsets.only(
                                 left: 14.0, bottom: 8.0, top: 8.0),
@@ -659,19 +715,40 @@ class _LoginWidget extends State<LoginWidget> {
                       )))
             ]),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: Size(200, 46),
-                        primary: CustomColors.secondaryColor,
-                        textStyle: const TextStyle(fontSize: 20),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                        )),
-                    onPressed: () {},
-                    child: const Text('Sign In'),
-                  ))
+              Flexible(
+                  flex: 1,
+                  child: Padding(
+                      padding: const EdgeInsets.fromLTRB(200, 8, 8, 8),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            minimumSize: Size(200, 46),
+                            primary: CustomColors.primaryColor,
+                            textStyle: const TextStyle(fontSize: 20),
+                            shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8)),
+                            )),
+                        onPressed: () {
+                          _onItemTapped(1);
+                        },
+                        child: const Text('Register'),
+                      ))),
+              Flexible(
+                  flex: 1,
+                  child: Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 8, 200, 8),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            minimumSize: Size(200, 46),
+                            primary: CustomColors.colorHighlight,
+                            textStyle: const TextStyle(fontSize: 20),
+                            shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8)),
+                            )),
+                        onPressed: () {},
+                        child: const Text('Sign In'),
+                      )))
             ])
           ],
         );
