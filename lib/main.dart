@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ios_android_flutter/rest/apis.dart';
+import 'package:ios_android_flutter/rest/helpers/validation_errors.dart';
 import 'package:ios_android_flutter/rest/retrofit.dart';
 
 import 'theme.dart';
@@ -15,9 +16,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Organizer',
-        theme: ThemeData(
-          fontFamily: 'sans-serif-light',
-        ),
+        theme:
+            ThemeData(fontFamily: 'sans-serif-light', errorColor: Colors.red),
         home: SafeArea(child: LoginWidget()));
   }
 }
@@ -32,10 +32,84 @@ class LoginWidget extends StatefulWidget {
 class _LoginWidget extends State<LoginWidget> {
   int _selectedIndex = 0;
 
+  String? loginValid;
+  String? passwordValid;
+  String? repeatPasswordValid;
+  final loginController = TextEditingController();
+  final passwordController = TextEditingController();
+  final repeatPasswordController = TextEditingController();
+
+  @override
+  void dispose() {
+    loginController.dispose();
+    passwordController.dispose();
+    repeatPasswordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loginController.addListener(validateLogin);
+    passwordController.addListener(validatePassword);
+    repeatPasswordController.addListener(validateRepeatPassword);
+  }
+
   void _onItemTapped(int index) {
     setState(() {
+      if (index == 0 &&
+          passwordValid == ValidationErrors.passwords_not_equals) {
+        passwordValid = null;
+        repeatPasswordValid = null;
+      }
       _selectedIndex = index;
     });
+  }
+
+  void validateLogin() {
+    String? validate =
+        loginController.text.isNotEmpty ? null : ValidationErrors.required;
+    if (validate != loginValid) {
+      setState(() {
+        loginValid = validate;
+      });
+    }
+  }
+
+  void validatePassword() {
+    String? validate = passwordController.text.isNotEmpty
+        ? ((_selectedIndex == 0 ||
+                passwordController.text == repeatPasswordController.text)
+            ? null
+            : ValidationErrors.passwords_not_equals)
+        : ValidationErrors.required;
+    if (validate != passwordValid) {
+      setState(() {
+        passwordValid = validate;
+        if (_selectedIndex == 1 &&
+            validate == ValidationErrors.passwords_not_equals) {
+          repeatPasswordValid = validate;
+        }
+      });
+    }
+  }
+
+  void validateRepeatPassword() {
+    String? validate = repeatPasswordController.text.isNotEmpty
+        ? ((_selectedIndex == 0 ||
+                passwordController.text == repeatPasswordController.text)
+            ? null
+            : ValidationErrors.passwords_not_equals)
+        : ValidationErrors.required;
+    if (validate != repeatPasswordValid) {
+      setState(() {
+        repeatPasswordValid = validate;
+        if (_selectedIndex == 1 &&
+            validate == ValidationErrors.passwords_not_equals) {
+          passwordValid = validate;
+        }
+      });
+    }
   }
 
   @override
@@ -109,12 +183,18 @@ class _LoginWidget extends State<LoginWidget> {
                   child: Padding(
                       padding: const EdgeInsets.fromLTRB(16, 150, 16, 16),
                       child: TextField(
+                        controller: loginController,
                         autofocus: false,
                         style: TextStyle(
                             fontSize: 22.0, color: CustomColors.primaryColor),
                         decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
+                            errorStyle: TextStyle(fontSize: 16, height: 0.6),
+                            errorText: loginValid,
+                            suffixIcon: loginValid == null
+                                ? null
+                                : Icon(Icons.error, color: Colors.red),
                             hintText: 'Login',
                             contentPadding: const EdgeInsets.only(
                                 left: 14.0, bottom: 8.0, top: 8.0),
@@ -137,6 +217,7 @@ class _LoginWidget extends State<LoginWidget> {
                   child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: TextField(
+                        controller: passwordController,
                         autofocus: false,
                         obscureText: true,
                         style: TextStyle(
@@ -144,6 +225,11 @@ class _LoginWidget extends State<LoginWidget> {
                         decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
+                            errorStyle: TextStyle(fontSize: 16, height: 0.6),
+                            errorText: passwordValid,
+                            suffixIcon: passwordValid == null
+                                ? null
+                                : Icon(Icons.error, color: Colors.red),
                             hintText: 'Password',
                             contentPadding: const EdgeInsets.only(
                                 left: 14.0, bottom: 8.0, top: 8.0),
@@ -166,6 +252,7 @@ class _LoginWidget extends State<LoginWidget> {
                   child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: TextField(
+                        controller: repeatPasswordController,
                         autofocus: false,
                         obscureText: true,
                         style: TextStyle(
@@ -173,6 +260,11 @@ class _LoginWidget extends State<LoginWidget> {
                         decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
+                            errorStyle: TextStyle(fontSize: 16, height: 0.6),
+                            errorText: repeatPasswordValid,
+                            suffixIcon: repeatPasswordValid == null
+                                ? null
+                                : Icon(Icons.error, color: Colors.red),
                             hintText: 'Repeat password',
                             contentPadding: const EdgeInsets.only(
                                 left: 14.0, bottom: 8.0, top: 8.0),
@@ -264,10 +356,16 @@ class _LoginWidget extends State<LoginWidget> {
                   child: Padding(
                       padding: const EdgeInsets.fromLTRB(16, 150, 16, 16),
                       child: TextField(
+                        controller: loginController,
                         autofocus: false,
                         style: TextStyle(
                             fontSize: 22.0, color: CustomColors.primaryColor),
                         decoration: InputDecoration(
+                            errorText: loginValid,
+                            errorStyle: TextStyle(fontSize: 16, height: 0.6),
+                            suffixIcon: loginValid == null
+                                ? null
+                                : Icon(Icons.error, color: Colors.red),
                             filled: true,
                             fillColor: Colors.white,
                             hintText: 'Login',
@@ -292,6 +390,7 @@ class _LoginWidget extends State<LoginWidget> {
                   child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: TextField(
+                        controller: passwordController,
                         autofocus: false,
                         obscureText: true,
                         style: TextStyle(
@@ -299,6 +398,11 @@ class _LoginWidget extends State<LoginWidget> {
                         decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
+                            errorStyle: TextStyle(fontSize: 16, height: 0.6),
+                            errorText: passwordValid,
+                            suffixIcon: passwordValid == null
+                                ? null
+                                : Icon(Icons.error, color: Colors.red),
                             hintText: 'Password',
                             contentPadding: const EdgeInsets.only(
                                 left: 14.0, bottom: 8.0, top: 8.0),
