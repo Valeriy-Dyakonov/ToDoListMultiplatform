@@ -43,6 +43,8 @@ dependencies:
   retrofit_generator: ^2.0.0+3
   build_runner: ^2.0.5
   analyzer:
+  sqflite: any
+  path_provider: any
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +65,8 @@ dev_dependencies:
   retrofit_generator: ^2.0.0+3
   build_runner: ^2.0.5
   analyzer:
+  sqflite: any
+  path_provider: any
 
 
 # For information on the generic Dart part of this file, see the
