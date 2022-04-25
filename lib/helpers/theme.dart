@@ -8,6 +8,8 @@ class CustomColors {
   static Color inputColor = getColorFromHex('#757575');
   static Color formColor = getColorFromHex('#DFCDFF');
   static Color notActive = getColorFromHex('#9E9E9E');
+  static Color selectedCard = getColorFromHex('#F2EBFF');
+  static Color selectedCardIcon = getColorFromHex('#3700B3');
 
   static Color getColorFromHex(String hexColor) {
     hexColor = hexColor.replaceAll("#", "");

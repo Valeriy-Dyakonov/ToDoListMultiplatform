@@ -17,6 +17,7 @@ class Task {
   String date;
   String content;
   String done;
+  bool selected;
 
   Task({
     required this.id,
@@ -25,6 +26,7 @@ class Task {
     required this.date,
     required this.content,
     required this.done,
+    required this.selected,
   });
 
   factory Task.fromMap(Map<String, dynamic> json) => Task(
@@ -34,10 +36,10 @@ class Task {
         date: json["date"],
         content: json["content"],
         done: json["done"],
+        selected: false,
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
         "name": name,
         "category": category,
         "date": date,
