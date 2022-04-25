@@ -11,7 +11,7 @@ String clientToJson(Task data) {
 }
 
 class Task {
-  int id;
+  int? id;
   String name;
   String category;
   String date;
@@ -20,7 +20,7 @@ class Task {
   bool selected;
 
   Task({
-    required this.id,
+    this.id,
     required this.name,
     required this.category,
     required this.date,
