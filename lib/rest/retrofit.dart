@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:ios_android_flutter/rest/model/response_token.dart';
+import 'package:ios_android_flutter/model/response_token.dart';
 
 import 'apis.dart';
 

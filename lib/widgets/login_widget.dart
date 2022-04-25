@@ -2,11 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ios_android_flutter/rest/apis.dart';
-import 'package:ios_android_flutter/rest/helpers/validation_errors.dart';
+import 'package:ios_android_flutter/helpers/validation_errors.dart';
 import 'package:ios_android_flutter/rest/retrofit.dart';
 
 import 'main_widget.dart';
-import '../../theme.dart';
+import '../helpers/theme.dart';
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({Key? key}) : super(key: key);
@@ -784,7 +784,7 @@ class _LoginWidget extends State<LoginWidget> {
   void navigateToMain() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => MainWidget()),
+      MaterialPageRoute(builder: (context) => MainPage()),
     );
   }
 }

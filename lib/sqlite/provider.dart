@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:ios_android_flutter/rest/sqlite/task_model.dart';
+import 'package:ios_android_flutter/sqlite/task_model.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';

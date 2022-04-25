@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ios_android_flutter/rest/widgets/login_widget.dart';
+import 'package:ios_android_flutter/widgets/login_widget.dart';
 
 void main() {
   runApp(MyApp());

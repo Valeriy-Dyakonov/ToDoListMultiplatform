@@ -9,8 +9,6 @@ class CustomColors {
   static Color formColor = getColorFromHex('#DFCDFF');
   static Color notActive = getColorFromHex('#9E9E9E');
 
-
-
   static Color getColorFromHex(String hexColor) {
     hexColor = hexColor.replaceAll("#", "");
     if (hexColor.length == 6) {
