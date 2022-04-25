@@ -24,6 +24,10 @@ class Helper {
     return DateFormat(DATE).format(date);
   }
 
+  static fullDateToString(DateTime date) {
+    return DateFormat(DATE_WITH_TIME).format(date);
+  }
+
   static getTimeFromDateTime(DateTime dateTime) {
     return TimeOfDay.fromDateTime(dateTime);
   }

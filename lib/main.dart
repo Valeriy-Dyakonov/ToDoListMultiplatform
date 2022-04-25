@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ios_android_flutter/sqlite/task_model.dart';
+import 'package:ios_android_flutter/utils/helper.dart';
 import 'package:ios_android_flutter/widgets/edit_widget.dart';
 
 void main() {
@@ -19,9 +20,9 @@ class MyApp extends StatelessWidget {
                     id: 1,
                     name: "Task 1",
                     category: "Home",
-                    date: "22/12/2022 22:23",
+                    date: Helper.fullDateToString(DateTime.now()),
                     content: "Content 1",
                     done: "true",
-                    selected: false))));
+                    selected: false), categories: ["Home", "Work"],)));
   }
 }
