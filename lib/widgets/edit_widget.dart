@@ -78,6 +78,23 @@ class _EditWidget extends State<EditWidget> {
       firstDate: DateTime(2017, 1),
       lastDate: DateTime(2022, 7),
       helpText: 'Select a date',
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: CustomColors.secondaryColor,
+              onPrimary: CustomColors.primaryColor,
+              onSurface: CustomColors.colorHighlight,
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                primary: CustomColors.colorHighlight
+              )
+            ),
+          ),
+          child: child!,
+        );
+      }
     );
     if (newDate != null) {
       setState(() {
@@ -92,11 +109,19 @@ class _EditWidget extends State<EditWidget> {
         context: context,
         initialTime: _time,
         initialEntryMode: TimePickerEntryMode.input,
-        builder: (context, childWidget) {
+        builder: (context, child) {
           return MediaQuery(
               data:
                   MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-              child: childWidget!);
+              child: Theme(
+                data: ThemeData.light().copyWith(
+                  colorScheme: ColorScheme.light(
+                    primary: CustomColors.secondaryColor,
+                    onPrimary: CustomColors.primaryColor,
+                    onSurface: CustomColors.colorHighlight,
+                  )
+                ), child: child!
+              ));
         });
     if (newTime != null) {
       setState(() {
