@@ -1,13 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:ios_android_flutter/rest/apis.dart';
-import 'package:ios_android_flutter/helpers/validation_errors.dart';
-import 'package:ios_android_flutter/rest/retrofit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:ios_android_flutter/helpers/validation_errors.dart';
+import 'package:ios_android_flutter/rest/apis.dart';
+import 'package:ios_android_flutter/rest/retrofit.dart';
 
-import 'main_widget.dart';
 import '../helpers/theme.dart';
+import 'main_widget.dart';
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({Key? key}) : super(key: key);
@@ -44,8 +44,7 @@ class _LoginWidget extends State<LoginWidget> {
 
   void _onItemTapped(int index) {
     setState(() {
-      if (index == 0 &&
-          passwordValid == ValidationErrors.passwordsNotEquals) {
+      if (index == 0 && passwordValid == ValidationErrors.passwordsNotEquals) {
         passwordValid = null;
         repeatPasswordValid = null;
       }
@@ -145,7 +144,8 @@ class _LoginWidget extends State<LoginWidget> {
                   flex: 1,
                   child: Padding(
                       padding: const EdgeInsets.only(right: 20),
-                      child: Text(AppLocalizations.of(context)?.loginFormSubtitle ?? '',
+                      child: Text(
+                          AppLocalizations.of(context)?.loginFormSubtitle ?? '',
                           style: TextStyle(
                               fontSize: 20, color: CustomColors.primaryColor))))
             ]),
@@ -169,6 +169,7 @@ class _LoginWidget extends State<LoginWidget> {
             ]),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(
+                  flex: 1,
                   child: Padding(
                       padding: const EdgeInsets.fromLTRB(16, 150, 16, 8),
                       child: TextField(
@@ -183,7 +184,8 @@ class _LoginWidget extends State<LoginWidget> {
                             suffixIcon: loginValid == null
                                 ? null
                                 : Icon(Icons.error, color: Colors.red),
-                            hintText: AppLocalizations.of(context)?.loginHint ?? '',
+                            hintText:
+                                AppLocalizations.of(context)?.loginHint ?? '',
                             contentPadding: const EdgeInsets.only(
                                 left: 14.0, bottom: 8.0, top: 8.0),
                             border: OutlineInputBorder(
@@ -202,6 +204,7 @@ class _LoginWidget extends State<LoginWidget> {
             ]),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(
+                  flex: 1,
                   child: Padding(
                       padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                       child: TextField(
@@ -217,7 +220,9 @@ class _LoginWidget extends State<LoginWidget> {
                             suffixIcon: passwordValid == null
                                 ? null
                                 : Icon(Icons.error, color: Colors.red),
-                            hintText: AppLocalizations.of(context)?.passwordHint ?? '',
+                            hintText:
+                                AppLocalizations.of(context)?.passwordHint ??
+                                    '',
                             contentPadding: const EdgeInsets.only(
                                 left: 14.0, bottom: 8.0, top: 8.0),
                             border: OutlineInputBorder(
@@ -236,6 +241,7 @@ class _LoginWidget extends State<LoginWidget> {
             ]),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(
+                  flex: 1,
                   child: Padding(
                       padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                       child: TextField(
@@ -251,7 +257,9 @@ class _LoginWidget extends State<LoginWidget> {
                             suffixIcon: repeatPasswordValid == null
                                 ? null
                                 : Icon(Icons.error, color: Colors.red),
-                            hintText: AppLocalizations.of(context)?.repeatPasswordHint ?? '',
+                            hintText: AppLocalizations.of(context)
+                                    ?.repeatPasswordHint ??
+                                '',
                             contentPadding: const EdgeInsets.only(
                                 left: 14.0, bottom: 8.0, top: 8.0),
                             border: OutlineInputBorder(
@@ -282,7 +290,8 @@ class _LoginWidget extends State<LoginWidget> {
                     onPressed: () {
                       save(true);
                     },
-                    child: Text(AppLocalizations.of(context)?.registerButton ?? ''),
+                    child: Text(
+                        AppLocalizations.of(context)?.registerButton ?? ''),
                   ))
             ])
           ],
@@ -315,7 +324,8 @@ class _LoginWidget extends State<LoginWidget> {
                   flex: 1,
                   child: Padding(
                       padding: const EdgeInsets.only(right: 20),
-                      child: Text(AppLocalizations.of(context)?.loginFormSubtitle ?? '',
+                      child: Text(
+                          AppLocalizations.of(context)?.loginFormSubtitle ?? '',
                           style: TextStyle(
                               fontSize: 20, color: CustomColors.primaryColor))))
             ]),
@@ -336,11 +346,13 @@ class _LoginWidget extends State<LoginWidget> {
                         onPressed: () {
                           _onItemTapped(1);
                         },
-                        child: Text(AppLocalizations.of(context)?.registerButton ?? ''),
+                        child: Text(
+                            AppLocalizations.of(context)?.registerButton ?? ''),
                       )))
             ]),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(
+                  flex: 1,
                   child: Padding(
                       padding: const EdgeInsets.fromLTRB(16, 150, 16, 8),
                       child: TextField(
@@ -355,7 +367,8 @@ class _LoginWidget extends State<LoginWidget> {
                                 : Icon(Icons.error, color: Colors.red),
                             filled: true,
                             fillColor: Colors.white,
-                            hintText: AppLocalizations.of(context)?.loginHint ?? '',
+                            hintText:
+                                AppLocalizations.of(context)?.loginHint ?? '',
                             contentPadding: const EdgeInsets.only(
                                 left: 14.0, bottom: 8.0, top: 8.0),
                             border: OutlineInputBorder(
@@ -374,6 +387,7 @@ class _LoginWidget extends State<LoginWidget> {
             ]),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(
+                  flex: 1,
                   child: Padding(
                       padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                       child: TextField(
@@ -389,7 +403,9 @@ class _LoginWidget extends State<LoginWidget> {
                             suffixIcon: passwordValid == null
                                 ? null
                                 : Icon(Icons.error, color: Colors.red),
-                            hintText: AppLocalizations.of(context)?.passwordHint ?? '',
+                            hintText:
+                                AppLocalizations.of(context)?.passwordHint ??
+                                    '',
                             contentPadding: const EdgeInsets.only(
                                 left: 14.0, bottom: 8.0, top: 8.0),
                             border: OutlineInputBorder(
@@ -455,12 +471,14 @@ class _LoginWidget extends State<LoginWidget> {
                   flex: 1,
                   child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                      child: Text(AppLocalizations.of(context)?.loginFormSubtitle ?? '',
+                      child: Text(
+                          AppLocalizations.of(context)?.loginFormSubtitle ?? '',
                           style: TextStyle(
                               fontSize: 20, color: CustomColors.primaryColor))))
             ]),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(
+                  flex: 1,
                   child: Padding(
                       padding: const EdgeInsets.fromLTRB(200, 0, 200, 4),
                       child: TextField(
@@ -476,7 +494,8 @@ class _LoginWidget extends State<LoginWidget> {
                             suffixIcon: loginValid == null
                                 ? null
                                 : Icon(Icons.error, color: Colors.red),
-                            hintText: AppLocalizations.of(context)?.loginHint ?? '',
+                            hintText:
+                                AppLocalizations.of(context)?.loginHint ?? '',
                             contentPadding: const EdgeInsets.only(
                                 left: 14.0, bottom: 8.0, top: 8.0),
                             border: OutlineInputBorder(
@@ -495,6 +514,7 @@ class _LoginWidget extends State<LoginWidget> {
             ]),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(
+                  flex: 1,
                   child: Padding(
                       padding: const EdgeInsets.fromLTRB(200, 4, 200, 4),
                       child: TextField(
@@ -510,7 +530,9 @@ class _LoginWidget extends State<LoginWidget> {
                             suffixIcon: passwordValid == null
                                 ? null
                                 : Icon(Icons.error, color: Colors.red),
-                            hintText: AppLocalizations.of(context)?.passwordHint ?? '',
+                            hintText:
+                                AppLocalizations.of(context)?.passwordHint ??
+                                    '',
                             contentPadding: const EdgeInsets.only(
                                 left: 14.0, bottom: 8.0, top: 8.0),
                             border: OutlineInputBorder(
@@ -529,6 +551,7 @@ class _LoginWidget extends State<LoginWidget> {
             ]),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(
+                  flex: 1,
                   child: Padding(
                       padding: const EdgeInsets.fromLTRB(200, 4, 200, 4),
                       child: TextField(
@@ -544,7 +567,9 @@ class _LoginWidget extends State<LoginWidget> {
                             suffixIcon: repeatPasswordValid == null
                                 ? null
                                 : Icon(Icons.error, color: Colors.red),
-                            hintText: AppLocalizations.of(context)?.repeatPasswordHint ?? '',
+                            hintText: AppLocalizations.of(context)
+                                    ?.repeatPasswordHint ??
+                                '',
                             contentPadding: const EdgeInsets.only(
                                 left: 14.0, bottom: 8.0, top: 8.0),
                             border: OutlineInputBorder(
@@ -578,7 +603,8 @@ class _LoginWidget extends State<LoginWidget> {
                         onPressed: () {
                           _onItemTapped(0);
                         },
-                        child: Text(AppLocalizations.of(context)?.loginForm ?? ''),
+                        child:
+                            Text(AppLocalizations.of(context)?.loginForm ?? ''),
                       ))),
               Flexible(
                   flex: 1,
@@ -596,7 +622,8 @@ class _LoginWidget extends State<LoginWidget> {
                         onPressed: () {
                           save(true);
                         },
-                        child: Text(AppLocalizations.of(context)?.registerButton ?? ''),
+                        child: Text(
+                            AppLocalizations.of(context)?.registerButton ?? ''),
                       ))),
             ])
           ],
@@ -629,12 +656,14 @@ class _LoginWidget extends State<LoginWidget> {
                   flex: 1,
                   child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                      child: Text(AppLocalizations.of(context)?.loginFormSubtitle ?? '',
+                      child: Text(
+                          AppLocalizations.of(context)?.loginFormSubtitle ?? '',
                           style: TextStyle(
                               fontSize: 20, color: CustomColors.primaryColor))))
             ]),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(
+                  flex: 1,
                   child: Padding(
                       padding: const EdgeInsets.fromLTRB(200, 32, 200, 4),
                       child: TextField(
@@ -649,7 +678,8 @@ class _LoginWidget extends State<LoginWidget> {
                             suffixIcon: loginValid == null
                                 ? null
                                 : Icon(Icons.error, color: Colors.red),
-                            hintText: AppLocalizations.of(context)?.loginHint ?? '',
+                            hintText:
+                                AppLocalizations.of(context)?.loginHint ?? '',
                             contentPadding: const EdgeInsets.only(
                                 left: 14.0, bottom: 8.0, top: 8.0),
                             border: OutlineInputBorder(
@@ -668,6 +698,7 @@ class _LoginWidget extends State<LoginWidget> {
             ]),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Expanded(
+                  flex: 1,
                   child: Padding(
                       padding: const EdgeInsets.fromLTRB(200, 4, 200, 4),
                       child: TextField(
@@ -683,7 +714,9 @@ class _LoginWidget extends State<LoginWidget> {
                             suffixIcon: passwordValid == null
                                 ? null
                                 : Icon(Icons.error, color: Colors.red),
-                            hintText: AppLocalizations.of(context)?.passwordHint ?? '',
+                            hintText:
+                                AppLocalizations.of(context)?.passwordHint ??
+                                    '',
                             contentPadding: const EdgeInsets.only(
                                 left: 14.0, bottom: 8.0, top: 8.0),
                             border: OutlineInputBorder(
@@ -717,7 +750,8 @@ class _LoginWidget extends State<LoginWidget> {
                         onPressed: () {
                           _onItemTapped(1);
                         },
-                        child: Text(AppLocalizations.of(context)?.registerButton ?? ''),
+                        child: Text(
+                            AppLocalizations.of(context)?.registerButton ?? ''),
                       ))),
               Flexible(
                   flex: 1,
@@ -735,7 +769,8 @@ class _LoginWidget extends State<LoginWidget> {
                         onPressed: () {
                           save(false);
                         },
-                        child: Text(AppLocalizations.of(context)?.loginForm ?? ''),
+                        child:
+                            Text(AppLocalizations.of(context)?.loginForm ?? ''),
                       )))
             ])
           ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ios_android_flutter/main.dart';
 import 'package:ios_android_flutter/sqlite/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,6 +37,7 @@ class _MainPage extends State<MainPage> {
       return CircularProgressIndicator();
     } else {
       return MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: AppLocalizations.of(context)?.appName ?? '',
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
@@ -47,7 +49,7 @@ class _MainPage extends State<MainPage> {
           },
           theme:
               ThemeData(fontFamily: 'sans-serif-light', errorColor: Colors.red),
-          home: SafeArea(child: MainWidget(needToWrap: false)));
+          home: MainWidget(needToWrap: false));
     }
   }
 
@@ -103,15 +105,17 @@ class _MainWidget extends State<MainWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return needToWrap
-        ? MaterialApp(
-            title: AppLocalizations.of(context)?.appName ?? '',
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            theme: ThemeData(
-                fontFamily: 'sans-serif-light', errorColor: Colors.red),
-            home: SafeArea(child: getMainContent()))
-        : getMainContent();
+    return SafeArea(
+        child: needToWrap
+            ? MaterialApp(
+                debugShowCheckedModeBanner: false,
+                title: AppLocalizations.of(context)?.appName ?? '',
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                supportedLocales: AppLocalizations.supportedLocales,
+                theme: ThemeData(
+                    fontFamily: 'sans-serif-light', errorColor: Colors.red),
+                home: getMainContent())
+            : getMainContent());
   }
 
   Scaffold getMainContent() {
@@ -224,20 +228,62 @@ class _MainWidget extends State<MainWidget> {
         title: Text(AppLocalizations.of(context)?.settings ?? ''),
         backgroundColor: CustomColors.secondaryColor,
       ),
-      body: Column(children: [
-        DropdownButton<String>(
-            items: <String>[
-              AppLocalizations.of(context)?.russian ?? '',
-              AppLocalizations.of(context)?.english ?? ''
-            ].map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (String? newValue) {
-              changeLanguage(newValue == 'English' ? 'en' : 'ru');
-            })
+      body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        Row(children: [
+          Padding(
+              padding: EdgeInsets.fromLTRB(95, 16, 16, 0),
+              child: Text(AppLocalizations.of(context)?.localization ?? '',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 18, color: CustomColors.subPrimaryColor)))
+        ]),
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Padding(
+              padding: const EdgeInsets.fromLTRB(12, 5, 12, 25),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    primary: CustomColors.secondaryColor,
+                    textStyle: const TextStyle(fontSize: 16),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    )),
+                onPressed: () {
+                  changeLanguage('ru');
+                },
+                child: Text(AppLocalizations.of(context)?.russian ?? ''),
+              )),
+          Padding(
+              padding: const EdgeInsets.fromLTRB(12, 5, 12, 25),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    primary: CustomColors.secondaryColor,
+                    textStyle: const TextStyle(fontSize: 16),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    )),
+                onPressed: () {
+                  changeLanguage('en');
+                },
+                child: Text(AppLocalizations.of(context)?.english ?? ''),
+              ))
+        ]),
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    minimumSize: Size(200, 46),
+                    primary: CustomColors.colorHighlight,
+                    textStyle: const TextStyle(fontSize: 20),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    )),
+                onPressed: () {
+                  logout();
+                },
+                child: Text(AppLocalizations.of(context)?.logout ?? ''),
+              ))
+        ])
       ]),
       bottomNavigationBar: getMenu(),
     );
@@ -253,6 +299,13 @@ class _MainWidget extends State<MainWidget> {
         MaterialPageRoute(builder: (context) => MainPage()),
       );
     }
+  }
+
+  void logout() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => MyApp()),
+    );
   }
 
   InkWell getCard(Task task) {

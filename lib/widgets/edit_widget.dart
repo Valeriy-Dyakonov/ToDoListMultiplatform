@@ -72,6 +72,7 @@ class _EditWidget extends State<EditWidget> {
 
   void _selectDate() async {
     final DateTime? newDate = await showDatePicker(
+      locale: Localizations.localeOf(context),
       context: context,
       initialDate: _date,
       firstDate: DateTime(2017, 1),
@@ -147,6 +148,7 @@ class _EditWidget extends State<EditWidget> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: AppLocalizations.of(context)?.appName ?? '',
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
