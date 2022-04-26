@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ios_android_flutter/sqlite/task_model.dart';
-import 'package:ios_android_flutter/utils/helper.dart';
-import 'package:ios_android_flutter/widgets/edit_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ios_android_flutter/widgets/main_widget.dart';
 
 void main() {
@@ -12,10 +10,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Organizer',
+        debugShowCheckedModeBanner: false,
+        title: AppLocalizations.of(context)?.appName ?? '',
         theme:
             ThemeData(fontFamily: 'sans-serif-light', errorColor: Colors.red),
-        home: SafeArea(
-            child: MainWidget()));
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: SafeArea(child: MainWidget()));
   }
 }

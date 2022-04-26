@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ios_android_flutter/sqlite/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../helpers/theme.dart';
 import '../sqlite/task_model.dart';
@@ -10,7 +11,9 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Organizer',
+        title: AppLocalizations.of(context)?.appName ?? '',
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         theme:
             ThemeData(fontFamily: 'sans-serif-light', errorColor: Colors.red),
         home: SafeArea(child: MainWidget()));
@@ -40,7 +43,7 @@ class _MainWidget extends State<MainWidget> {
     DBProvider.db.getTasks().then((value) {
       setState(() {
         allTasks = value;
-        tasks = getListByType("Next 24 hours", value);
+        tasks = getListByType("2", value);
       });
     });
   }
@@ -67,7 +70,7 @@ class _MainWidget extends State<MainWidget> {
             icon: Icon(Icons.menu),
             onPressed: () => _scaffoldKey.currentState?.openDrawer(),
           ),
-          title: Text('Tasks'),
+          title: Text(AppLocalizations.of(context)?.notes ?? ''),
           backgroundColor: CustomColors.secondaryColor,
         ),
         drawer: Drawer(
@@ -77,33 +80,33 @@ class _MainWidget extends State<MainWidget> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.fromLTRB(16.0, 16, 16, 0),
-                child: Text('Show by Period',
+                child: Text(AppLocalizations.of(context)?.drawerMenuTitleTime ?? '',
                     style:
                         TextStyle(color: CustomColors.notActive, fontSize: 24)),
               ),
               ListTile(
-                title: Text('Overdue'),
-                onTap: () => selectDestination('Overdue'),
+                title: Text(AppLocalizations.of(context)?.overdue ?? ''),
+                onTap: () => selectDestination("1"),
               ),
               ListTile(
-                title: Text('Next 24 hours'),
-                onTap: () => selectDestination('Next 24 hours'),
+                title: Text(AppLocalizations.of(context)?.today ?? ''),
+                onTap: () => selectDestination("2"),
               ),
               ListTile(
-                title: Text('Coming days'),
-                onTap: () => selectDestination('Coming days'),
+                title: Text(AppLocalizations.of(context)?.tomorrow ?? ''),
+                onTap: () => selectDestination("3"),
               ),
               ListTile(
-                title: Text('Week'),
-                onTap: () => selectDestination('Week'),
+                title: Text(AppLocalizations.of(context)?.week ?? ''),
+                onTap: () => selectDestination("4"),
               ),
               ListTile(
-                title: Text('Month'),
-                onTap: () => selectDestination('Month'),
+                title: Text(AppLocalizations.of(context)?.month ?? ''),
+                onTap: () => selectDestination("5"),
               ),
               ListTile(
-                title: Text('Future'),
-                onTap: () => selectDestination('Future'),
+                title: Text(AppLocalizations.of(context)?.future ?? ''),
+                onTap: () => selectDestination("6"),
               ),
               Divider(
                 height: 1,
@@ -111,7 +114,7 @@ class _MainWidget extends State<MainWidget> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(16.0, 16, 16, 0),
-                child: Text('Show by Category',
+                child: Text(AppLocalizations.of(context)?.drawerMenuTitleCategory ?? '',
                     style:
                         TextStyle(color: CustomColors.notActive, fontSize: 24)),
               ),
@@ -158,12 +161,12 @@ class _MainWidget extends State<MainWidget> {
   Scaffold getSettingsFragment() {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: Text(AppLocalizations.of(context)?.settings ?? ''),
         backgroundColor: CustomColors.secondaryColor,
       ),
       body: Column(children: [
         DropdownButton<String>(
-            items: <String>['Ru', 'En']
+            items: <String>[AppLocalizations.of(context)?.russian ?? '', AppLocalizations.of(context)?.english ?? '']
                 .map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
@@ -249,15 +252,15 @@ class _MainWidget extends State<MainWidget> {
       },
       items: [
         BottomNavigationBarItem(
-          label: 'Tasks',
+          label: AppLocalizations.of(context)?.notes ?? '',
           icon: Icon(Icons.notes),
         ),
         BottomNavigationBarItem(
-          label: 'Map',
+          label: AppLocalizations.of(context)?.map ?? '',
           icon: Icon(Icons.map),
         ),
         BottomNavigationBarItem(
-          label: 'Settings',
+          label: AppLocalizations.of(context)?.settings ?? '',
           icon: Icon(Icons.settings),
         ),
       ],
@@ -277,7 +280,7 @@ class _MainWidget extends State<MainWidget> {
                 style: TextStyle(color: CustomColors.colorHighlight))
           ])
         : Row(children: [
-            Text(task.date, style: TextStyle(color: CustomColors.inputColor))
+            Text(Helper.parseDateForCard(task.date), style: TextStyle(color: CustomColors.inputColor))
           ]);
   }
 
@@ -354,31 +357,31 @@ class _MainWidget extends State<MainWidget> {
 
   List<Task> getListByType(String type, List<Task> list) {
     switch (type) {
-      case "Overdue":
+      case "1":
         return list
             .where((element) =>
                 Helper.getDiffFromToday(element.date) < 0 &&
                 !Helper.parseBool(element.done))
             .toList();
-      case "Next 24 hours":
+      case "2":
         return list
             .where((element) => Helper.getDiffFromToday(element.date) == 0)
             .toList();
-      case "Coming days":
+      case "3":
         return list
             .where((element) => Helper.getDiffFromToday(element.date) == 1)
             .toList();
-      case "Week":
+      case "4":
         return list.where((element) {
           var diffFromToday = Helper.getDiffFromToday(element.date);
           return diffFromToday > 1 && diffFromToday <= 7;
         }).toList();
-      case "Month":
+      case "5":
         return list.where((element) {
           var diffFromToday = Helper.getDiffFromToday(element.date);
           return diffFromToday > 7 && diffFromToday <= 31;
         }).toList();
-      case "Future":
+      case "6":
         return list.where((element) {
           var diffFromToday = Helper.getDiffFromToday(element.date);
           return diffFromToday > 31;

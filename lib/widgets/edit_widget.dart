@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ios_android_flutter/sqlite/provider.dart';
 import 'package:ios_android_flutter/widgets/main_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../helpers/theme.dart';
 import '../sqlite/task_model.dart';
@@ -16,7 +17,9 @@ class EditPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Organizer',
+        title: AppLocalizations.of(context)?.appName ?? '',
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         theme:
             ThemeData(fontFamily: 'sans-serif-light', errorColor: Colors.red),
         home: SafeArea(child: EditWidget(task: task, categories: categories)));
@@ -175,7 +178,7 @@ class _EditWidget extends State<EditWidget> {
             child: Column(children: [
           Padding(
               padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-              child: Text(isAdd ? "Create new task" : "Edit task",
+              child: Text(isAdd ? AppLocalizations.of(context)?.createTitle ?? '' : AppLocalizations.of(context)?.editTitle ?? '',
                   style: TextStyle(fontSize: 32))),
           Row(children: [
             Expanded(
@@ -194,7 +197,7 @@ class _EditWidget extends State<EditWidget> {
                           suffixIcon: nameValid
                               ? null
                               : Icon(Icons.error, color: Colors.red),
-                          hintText: 'Name',
+                          hintText: AppLocalizations.of(context)?.nameHint ?? '',
                           contentPadding: const EdgeInsets.only(
                               left: 14.0, bottom: 8.0, top: 8.0),
                           border: OutlineInputBorder(
@@ -239,7 +242,7 @@ class _EditWidget extends State<EditWidget> {
                               }).toList();
                             },
                           ),
-                          hintText: 'Category',
+                          hintText: AppLocalizations.of(context)?.categoryHint ?? '',
                           contentPadding: const EdgeInsets.only(
                               left: 14.0, bottom: 8.0, top: 8.0),
                           border: OutlineInputBorder(
@@ -272,7 +275,7 @@ class _EditWidget extends State<EditWidget> {
                               icon: Icon(Icons.date_range,
                                   color: CustomColors.colorHighlight),
                               onPressed: _selectDate),
-                          hintText: 'DD/MM/YYYY',
+                          hintText: AppLocalizations.of(context)?.dateHint ?? '',
                           contentPadding: const EdgeInsets.only(
                               left: 14.0, bottom: 8.0, top: 8.0),
                           border: OutlineInputBorder(
@@ -306,7 +309,7 @@ class _EditWidget extends State<EditWidget> {
                               icon: Icon(Icons.access_time_outlined,
                                   color: CustomColors.colorHighlight),
                               onPressed: _selectTime),
-                          hintText: 'HH:mm',
+                          hintText: AppLocalizations.of(context)?.timeHint ?? '',
                           contentPadding: const EdgeInsets.only(
                               left: 14.0, bottom: 8.0, top: 8.0),
                           border: OutlineInputBorder(
@@ -335,7 +338,7 @@ class _EditWidget extends State<EditWidget> {
                       decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
-                          hintText: 'Content',
+                          hintText: AppLocalizations.of(context)?.contentHint ?? '',
                           contentPadding: const EdgeInsets.only(
                               left: 14.0, bottom: 8.0, top: 8.0),
                           border: OutlineInputBorder(
@@ -365,7 +368,7 @@ class _EditWidget extends State<EditWidget> {
                   onPressed: () {
                     save();
                   },
-                  child: const Text('Save'),
+                  child: Text(AppLocalizations.of(context)?.saveButton ?? ''),
                 ))
           ])
         ])));
@@ -378,7 +381,7 @@ class _EditWidget extends State<EditWidget> {
             child: Column(children: [
           Padding(
               padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-              child: Text(isAdd ? "Create new task" : "Edit task",
+              child: Text(isAdd ? AppLocalizations.of(context)?.createTitle ?? '' : AppLocalizations.of(context)?.editTitle ?? '',
                   style: TextStyle(fontSize: 32))),
           Row(children: [
             Expanded(
@@ -397,7 +400,7 @@ class _EditWidget extends State<EditWidget> {
                           suffixIcon: nameValid
                               ? null
                               : Icon(Icons.error, color: Colors.red),
-                          hintText: 'Name',
+                          hintText: AppLocalizations.of(context)?.nameHint ?? '',
                           contentPadding: const EdgeInsets.only(
                               left: 14.0, bottom: 8.0, top: 8.0),
                           border: OutlineInputBorder(
@@ -444,7 +447,7 @@ class _EditWidget extends State<EditWidget> {
                               }).toList();
                             },
                           ),
-                          hintText: 'Category',
+                          hintText: AppLocalizations.of(context)?.categoryHint ?? '',
                           contentPadding: const EdgeInsets.only(
                               left: 14.0, bottom: 8.0, top: 8.0),
                           border: OutlineInputBorder(
@@ -477,7 +480,7 @@ class _EditWidget extends State<EditWidget> {
                               icon: Icon(Icons.date_range,
                                   color: CustomColors.colorHighlight),
                               onPressed: _selectDate),
-                          hintText: 'DD/MM/YYYY',
+                          hintText: AppLocalizations.of(context)?.dateHint ?? '',
                           contentPadding: const EdgeInsets.only(
                               left: 14.0, bottom: 8.0, top: 8.0),
                           border: OutlineInputBorder(
@@ -509,7 +512,7 @@ class _EditWidget extends State<EditWidget> {
                               icon: Icon(Icons.access_time_outlined,
                                   color: CustomColors.colorHighlight),
                               onPressed: _selectTime),
-                          hintText: 'HH:mm',
+                          hintText: AppLocalizations.of(context)?.timeHint ?? '',
                           contentPadding: const EdgeInsets.only(
                               left: 14.0, bottom: 8.0, top: 8.0),
                           border: OutlineInputBorder(
@@ -538,7 +541,7 @@ class _EditWidget extends State<EditWidget> {
                       decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
-                          hintText: 'Content',
+                          hintText: AppLocalizations.of(context)?.contentHint ?? '',
                           contentPadding: const EdgeInsets.only(
                               left: 14.0, bottom: 8.0, top: 8.0),
                           border: OutlineInputBorder(
@@ -568,7 +571,7 @@ class _EditWidget extends State<EditWidget> {
                   onPressed: () {
                     save();
                   },
-                  child: const Text('Save'),
+                  child: Text(AppLocalizations.of(context)?.saveButton ?? ''),
                 ))
           ])
         ])));
