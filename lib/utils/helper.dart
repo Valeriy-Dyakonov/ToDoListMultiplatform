@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 class Helper {
   static const String dateWithTime = "dd/MM/yyyy HH:mm";
+  static const String dateWithTimeForCard = "dd MMM yyyy HH:mm";
   static const String date = "dd/MM/yyyy";
 
   static parseBool(String value) {
@@ -13,6 +14,11 @@ class Helper {
 
   static boolToString(bool value) {
     return value ? 'true' : 'false';
+  }
+
+  static parseDateForCard(String datetime) {
+      var date = parseDate(datetime);
+      return DateFormat(dateWithTimeForCard).format(date);
   }
 
   static parseDate(String date) {

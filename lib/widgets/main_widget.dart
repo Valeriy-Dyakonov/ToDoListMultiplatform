@@ -216,7 +216,7 @@ class _MainWidget extends State<MainWidget> {
   Row getSubtitle(Task task) {
     return task.category.isNotEmpty
         ? Row(children: [
-            Text(task.date, style: TextStyle(color: CustomColors.inputColor)),
+            Text(Helper.parseDateForCard(task.date), style: TextStyle(color: CustomColors.inputColor)),
             Padding(
               padding: EdgeInsets.fromLTRB(10, 0, 2, 0),
               child: Icon(Icons.bookmark, color: CustomColors.secondaryColor),
