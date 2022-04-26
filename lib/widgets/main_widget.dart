@@ -54,6 +54,12 @@ class _MainWidget extends State<MainWidget> {
 
   @override
   Widget build(BuildContext context) {
+    return _currentIndex == 0
+        ? getTasksFragment()
+        : (_currentIndex == 1 ? getMapFragment() : getSettingsFragment());
+  }
+
+  Scaffold getTasksFragment() {
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
@@ -123,39 +129,16 @@ class _MainWidget extends State<MainWidget> {
                 )
               : GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, childAspectRatio:(MediaQuery.of(context).size.height * 0.007)),
+                      crossAxisCount: 2,
+                      childAspectRatio:
+                          (MediaQuery.of(context).size.height * 0.007)),
                   itemCount: tasks.length,
                   itemBuilder: (BuildContext context, int index) {
                     return getCard(tasks[index]);
                   },
                 );
         }),
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          currentIndex: _currentIndex,
-          backgroundColor: CustomColors.secondaryColor,
-          selectedItemColor: Colors.white,
-          unselectedItemColor: CustomColors.notActive,
-          selectedLabelStyle: TextStyle(color: Colors.white),
-          unselectedLabelStyle: TextStyle(color: CustomColors.notActive),
-          onTap: (value) {
-            setState(() => _currentIndex = value);
-          },
-          items: [
-            BottomNavigationBarItem(
-              label: 'Tasks',
-              icon: Icon(Icons.notes),
-            ),
-            BottomNavigationBarItem(
-              label: 'Map',
-              icon: Icon(Icons.map),
-            ),
-            BottomNavigationBarItem(
-              label: 'Settings',
-              icon: Icon(Icons.settings),
-            ),
-          ],
-        ),
+        bottomNavigationBar: getMenu(),
         floatingActionButton: FloatingActionButton(
           backgroundColor: CustomColors.secondaryColor,
           foregroundColor: Colors.white,
@@ -164,6 +147,35 @@ class _MainWidget extends State<MainWidget> {
           },
           child: Icon(isToAdd ? Icons.add : Icons.delete),
         ));
+  }
+
+  Scaffold getMapFragment() {
+    return Scaffold(
+      bottomNavigationBar: getMenu(),
+    );
+  }
+
+  Scaffold getSettingsFragment() {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Settings'),
+        backgroundColor: CustomColors.secondaryColor,
+      ),
+      body: Column(children: [
+        DropdownButton<String>(
+            items: <String>['Ru', 'En']
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
+              setState(() {});
+            })
+      ]),
+      bottomNavigationBar: getMenu(),
+    );
   }
 
   InkWell getCard(Task task) {
@@ -221,6 +233,35 @@ class _MainWidget extends State<MainWidget> {
                 ],
               )),
         ));
+  }
+
+  BottomNavigationBar getMenu() {
+    return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      currentIndex: _currentIndex,
+      backgroundColor: CustomColors.secondaryColor,
+      selectedItemColor: Colors.white,
+      unselectedItemColor: CustomColors.notActive,
+      selectedLabelStyle: TextStyle(color: Colors.white),
+      unselectedLabelStyle: TextStyle(color: CustomColors.notActive),
+      onTap: (value) {
+        setState(() => _currentIndex = value);
+      },
+      items: [
+        BottomNavigationBarItem(
+          label: 'Tasks',
+          icon: Icon(Icons.notes),
+        ),
+        BottomNavigationBarItem(
+          label: 'Map',
+          icon: Icon(Icons.map),
+        ),
+        BottomNavigationBarItem(
+          label: 'Settings',
+          icon: Icon(Icons.settings),
+        ),
+      ],
+    );
   }
 
   Row getSubtitle(Task task) {
