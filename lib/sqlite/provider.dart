@@ -11,9 +11,9 @@ class DBProvider {
 
   static final DBProvider db = DBProvider._();
 
-  late Database _database;
+  Database? _database = null;
 
-  Future<Database> get database async {
+  Future<Database?> get database async {
     if (_database != null) {
       return _database;
     }
@@ -37,35 +37,43 @@ class DBProvider {
     });
   }
 
+  Future<List<Task>> getTasks() async {
+    final db = await database;
+    var res = await db?.query("notes");
+    List<Task>? list =
+    res != null && res.isNotEmpty ? res.map((c) => Task.fromMap(c)).toList() : [];
+    return list;
+  }
+
   newTask(Task task) async {
     final db = await database;
-    var raw = await db.rawInsert(
+    var raw = await db?.rawInsert(
         "INSERT Into notes (name,category,date,content,done)"
-        " VALUES (?,?,?,?)",
+        " VALUES (?,?,?,?,?)",
         [task.name, task.category, task.date, task.content, task.done]);
     return raw;
   }
 
-  changeStatus(Task task) async {
+  Future <int?> changeStatus(Task task) async {
     final db = await database;
     var values = <String, dynamic>{};
     values.putIfAbsent("done", () => task.done);
     var res =
-        await db.update("notes", values, where: "id = ?", whereArgs: [task.id]);
+        await db?.update("notes", values, where: "id = ?", whereArgs: [task.id]);
     return res;
   }
 
   updateTask(Task task) async {
     final db = await database;
     var res = await db
-        .update("notes", task.toMap(), where: "id = ?", whereArgs: [task.id]);
+        ?.update("notes", task.toMap(), where: "id = ?", whereArgs: [task.id]);
     return res;
   }
 
-  deleteAll(List<Task> tasks) async {
+  Future<void> deleteAll(List<Task> tasks) async {
     final db = await database;
     for (var task in tasks) {
-      db.rawDelete("Delete * from notes  WHERE id = ?", [task.id]);
+      db?.rawDelete("Delete from notes WHERE id = ?", [task.id]);
     }
   }
 }

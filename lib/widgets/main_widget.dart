@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ios_android_flutter/sqlite/provider.dart';
 
 import '../helpers/theme.dart';
 import '../sqlite/task_model.dart';
@@ -30,24 +31,18 @@ class _MainWidget extends State<MainWidget> {
 
   bool isToAdd = true;
 
-  List<Task> tasks = <Task>[
-    Task(
-        id: 1,
-        name: "Task 1",
-        category: "Home",
-        date: "22/12/2022 22:23",
-        content: "Content 1",
-        done: "true",
-        selected: false),
-    Task(
-        id: 2,
-        name: "Task 2",
-        category: "",
-        date: "22/11/2022 22:23",
-        content: "Content 2",
-        done: "false",
-        selected: false)
-  ];
+  List<Task> tasks = <Task>[];
+
+  @override
+  void initState() {
+    super.initState();
+
+    DBProvider.db.getTasks().then((value) {
+      setState(() {
+        tasks = value;
+      });
+    });
+  }
 
   void selectDestination(String index) {
     setState(() {
@@ -111,7 +106,7 @@ class _MainWidget extends State<MainWidget> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16.0, 16, 16, 0),
                 child: Text(
-                  'Show by Period',  style: TextStyle(color: CustomColors.notActive, fontSize: 24)
+                  'Show by Category',  style: TextStyle(color: CustomColors.notActive, fontSize: 24)
                 ),
               ),
               ...getDynamicallyListTileList()
@@ -247,7 +242,7 @@ class _MainWidget extends State<MainWidget> {
   void onCheckBoxClick(Task task) {
     var firstWhere = tasks.firstWhere((element) => element.id == task.id);
     firstWhere.done = Helper.boolToString(!Helper.parseBool(firstWhere.done));
-    setState(() {});
+    DBProvider.db.changeStatus(firstWhere).then((value) => setState(() {}));
   }
 
   void onCardLongClick(Task task) {
@@ -284,6 +279,12 @@ class _MainWidget extends State<MainWidget> {
               categories: getCategories(),
             )),
       );
+    } else {
+      var toDelete = tasks.where((element) => element.selected).toList();
+      DBProvider.db.deleteAll(toDelete).then((value) => setState(() {
+        tasks = tasks.where((element) => !element.selected).toList();
+        isToAdd = true;
+      }));
     }
   }
 
