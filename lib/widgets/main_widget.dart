@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:ios_android_flutter/main.dart';
 import 'package:ios_android_flutter/sqlite/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -83,6 +87,37 @@ class _MainWidget extends State<MainWidget> {
 
   List<Task> allTasks = <Task>[];
   List<Task> tasks = <Task>[];
+
+  Completer<GoogleMapController> _controllerGoogleMap = Completer();
+  late GoogleMapController googleMapController;
+  late Position currentPosition;
+
+  void locatePosition() async {
+    LocationPermission permission;
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.deniedForever) {
+        return Future.error('Location Not Available');
+      }
+    } else {
+      throw Exception('Error');
+    }
+
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    currentPosition = position;
+
+    LatLng latLatPosition = LatLng(position.latitude, position.longitude);
+
+    CameraPosition cameraPosition =
+        new CameraPosition(target: latLatPosition, zoom: 14);
+    googleMapController
+        .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+  }
+
+  static final CameraPosition initialPosition =
+      CameraPosition(target: LatLng(53.185584, 50.087581), zoom: 14);
 
   @override
   void initState() {
@@ -218,6 +253,21 @@ class _MainWidget extends State<MainWidget> {
 
   Scaffold getMapFragment() {
     return Scaffold(
+      body: Stack(
+        children: [
+          GoogleMap(
+            initialCameraPosition: initialPosition,
+            myLocationButtonEnabled: true,
+            myLocationEnabled: true,
+            mapType: MapType.normal,
+            onMapCreated: (GoogleMapController controller) {
+              _controllerGoogleMap.complete(controller);
+              googleMapController = controller;
+              locatePosition();
+            },
+          )
+        ],
+      ),
       bottomNavigationBar: getMenu(),
     );
   }
