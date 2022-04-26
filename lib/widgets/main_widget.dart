@@ -71,10 +71,9 @@ class _MainWidget extends State<MainWidget> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.fromLTRB(16.0, 16, 16, 0),
-                child: Text(
-                  'Show by Period',
-                  style: TextStyle(color: CustomColors.notActive, fontSize: 24)
-                ),
+                child: Text('Show by Period',
+                    style:
+                        TextStyle(color: CustomColors.notActive, fontSize: 24)),
               ),
               ListTile(
                 title: Text('Overdue'),
@@ -106,20 +105,31 @@ class _MainWidget extends State<MainWidget> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(16.0, 16, 16, 0),
-                child: Text(
-                  'Show by Category',  style: TextStyle(color: CustomColors.notActive, fontSize: 24)
-                ),
+                child: Text('Show by Category',
+                    style:
+                        TextStyle(color: CustomColors.notActive, fontSize: 24)),
               ),
               ...getDynamicallyListTileList()
             ],
           ),
         ),
-        body: ListView.builder(
-          itemCount: tasks.length,
-          itemBuilder: (BuildContext context, int index) {
-            return getCard(tasks[index]);
-          },
-        ),
+        body: OrientationBuilder(builder: (context, orientation) {
+          return orientation == Orientation.portrait
+              ? ListView.builder(
+                  itemCount: tasks.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return getCard(tasks[index]);
+                  },
+                )
+              : GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, childAspectRatio:(MediaQuery.of(context).size.height * 0.007)),
+                  itemCount: tasks.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return getCard(tasks[index]);
+                  },
+                );
+        }),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: _currentIndex,
@@ -216,7 +226,8 @@ class _MainWidget extends State<MainWidget> {
   Row getSubtitle(Task task) {
     return task.category.isNotEmpty
         ? Row(children: [
-            Text(Helper.parseDateForCard(task.date), style: TextStyle(color: CustomColors.inputColor)),
+            Text(Helper.parseDateForCard(task.date),
+                style: TextStyle(color: CustomColors.inputColor)),
             Padding(
               padding: EdgeInsets.fromLTRB(10, 0, 2, 0),
               child: Icon(Icons.bookmark, color: CustomColors.secondaryColor),
@@ -257,10 +268,10 @@ class _MainWidget extends State<MainWidget> {
     Navigator.push(
         context,
         MaterialPageRoute(
-        builder: (context) => EditPage(
-      task: task,
-      categories: getCategories(),
-    )));
+            builder: (context) => EditPage(
+                  task: task,
+                  categories: getCategories(),
+                )));
   }
 
   void onFloatButtonClick() {
@@ -269,58 +280,73 @@ class _MainWidget extends State<MainWidget> {
         context,
         MaterialPageRoute(
             builder: (context) => EditPage(
-              task: Task(
-                  id: null,
-                  name: "",
-                  category: "",
-                  date: Helper.fullDateToString(DateTime.now()),
-                  content: "",
-                  done: "false",
-                  selected: false),
-              categories: getCategories(),
-            )),
+                  task: Task(
+                      id: null,
+                      name: "",
+                      category: "",
+                      date: Helper.fullDateToString(DateTime.now()),
+                      content: "",
+                      done: "false",
+                      selected: false),
+                  categories: getCategories(),
+                )),
       );
     } else {
       var toDelete = tasks.where((element) => element.selected).toList();
       DBProvider.db.deleteAll(toDelete).then((value) => setState(() {
-        tasks = tasks.where((element) => !element.selected).toList();
-        allTasks = allTasks.where((element) => !element.selected).toList();
-        isToAdd = true;
-      }));
+            tasks = tasks.where((element) => !element.selected).toList();
+            allTasks = allTasks.where((element) => !element.selected).toList();
+            isToAdd = true;
+          }));
     }
   }
 
   List<String> getCategories() {
-    return tasks.where((e) => e.category.isNotEmpty).map((e) {
-      return Helper.capitalizeString(e.category);
-    }).toSet().toList();
+    return tasks
+        .where((e) => e.category.isNotEmpty)
+        .map((e) {
+          return Helper.capitalizeString(e.category);
+        })
+        .toSet()
+        .toList();
   }
 
   List<Task> getListByType(String type, List<Task> list) {
-      switch (type) {
-        case "Overdue":
-          return list.where((element) => Helper.getDiffFromToday(element.date) < 0 && !Helper.parseBool(element.done)).toList();
-        case "Next 24 hours":
-          return list.where((element) => Helper.getDiffFromToday(element.date) == 0).toList();
-        case "Coming days":
-          return list.where((element) => Helper.getDiffFromToday(element.date) == 1).toList();
-        case "Week":
-          return list.where((element) {
-            var diffFromToday = Helper.getDiffFromToday(element.date);
-            return diffFromToday > 1 && diffFromToday <=7;
-          }).toList();
-        case "Month":
-          return list.where((element) {
-            var diffFromToday = Helper.getDiffFromToday(element.date);
-            return diffFromToday > 7 && diffFromToday <= 31;
-          }).toList();
-        case "Future":
-          return list.where((element) {
-            var diffFromToday = Helper.getDiffFromToday(element.date);
-            return diffFromToday > 31;
-          }).toList();
-        default:
-          return list.where((element) => Helper.capitalizeString(element.category) == type).toList();
-      }
+    switch (type) {
+      case "Overdue":
+        return list
+            .where((element) =>
+                Helper.getDiffFromToday(element.date) < 0 &&
+                !Helper.parseBool(element.done))
+            .toList();
+      case "Next 24 hours":
+        return list
+            .where((element) => Helper.getDiffFromToday(element.date) == 0)
+            .toList();
+      case "Coming days":
+        return list
+            .where((element) => Helper.getDiffFromToday(element.date) == 1)
+            .toList();
+      case "Week":
+        return list.where((element) {
+          var diffFromToday = Helper.getDiffFromToday(element.date);
+          return diffFromToday > 1 && diffFromToday <= 7;
+        }).toList();
+      case "Month":
+        return list.where((element) {
+          var diffFromToday = Helper.getDiffFromToday(element.date);
+          return diffFromToday > 7 && diffFromToday <= 31;
+        }).toList();
+      case "Future":
+        return list.where((element) {
+          var diffFromToday = Helper.getDiffFromToday(element.date);
+          return diffFromToday > 31;
+        }).toList();
+      default:
+        return list
+            .where(
+                (element) => Helper.capitalizeString(element.category) == type)
+            .toList();
+    }
   }
 }
