@@ -8,24 +8,6 @@ import '../helpers/theme.dart';
 import '../sqlite/task_model.dart';
 import '../utils/helper.dart';
 
-class EditPage extends StatelessWidget {
-  final Task task;
-  final List<String> categories;
-
-  EditPage({required this.task, required this.categories});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        title: AppLocalizations.of(context)?.appName ?? '',
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        theme:
-            ThemeData(fontFamily: 'sans-serif-light', errorColor: Colors.red),
-        home: SafeArea(child: EditWidget(task: task, categories: categories)));
-  }
-}
-
 class EditWidget extends StatefulWidget {
   final Task task;
   final List<String> categories;
@@ -158,17 +140,23 @@ class _EditWidget extends State<EditWidget> {
   void navigateToMain() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => MainPage()),
+      MaterialPageRoute(builder: (context) => MainWidget(needToWrap: false)),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return OrientationBuilder(builder: (context, orientation) {
+    return MaterialApp(
+        title: AppLocalizations.of(context)?.appName ?? '',
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        theme:
+        ThemeData(fontFamily: 'sans-serif-light', errorColor: Colors.red),
+        home: SafeArea(child: OrientationBuilder(builder: (context, orientation) {
       return orientation == Orientation.portrait
           ? getVerticalEdit()
           : getHorizontalEdit();
-    });
+    })));
   }
 
   getVerticalEdit() {

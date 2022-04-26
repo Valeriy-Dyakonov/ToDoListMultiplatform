@@ -41,7 +41,7 @@
   "timeHint": "HH:mm",
   "contentHint": "Description",
   "saveButton": "Save",
-  "russian": "Russian",
+  "russian": "Русский",
   "english": "English",
   "required": "Required",
   "passwordError": "Passwords are not equals"

@@ -1,35 +1,81 @@
 import 'package:flutter/material.dart';
-import 'package:ios_android_flutter/sqlite/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ios_android_flutter/sqlite/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helpers/theme.dart';
 import '../sqlite/task_model.dart';
 import '../utils/helper.dart';
 import 'edit_widget.dart';
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
+  const MainPage({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _MainPage();
+}
+
+class _MainPage extends State<MainPage> {
+  Locale? locale;
+  bool localeLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    this._fetchLocale().then((locale) {
+      setState(() {
+        this.localeLoaded = true;
+        this.locale = locale;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: AppLocalizations.of(context)?.appName ?? '',
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        theme:
-            ThemeData(fontFamily: 'sans-serif-light', errorColor: Colors.red),
-        home: SafeArea(child: MainWidget()));
+    if (this.localeLoaded == false) {
+      return CircularProgressIndicator();
+    } else {
+      return MaterialApp(
+          title: AppLocalizations.of(context)?.appName ?? '',
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          localeResolutionCallback: (deviceLocale, supportedLocales) {
+            if (locale == null) {
+              locale = deviceLocale!;
+            }
+            return locale;
+          },
+          theme:
+              ThemeData(fontFamily: 'sans-serif-light', errorColor: Colors.red),
+          home: SafeArea(child: MainWidget(needToWrap: false)));
+    }
+  }
+
+  _fetchLocale() async {
+    var prefs = await SharedPreferences.getInstance();
+    if (prefs.getString('languageCode') == null) {
+      return null;
+    }
+    return Locale(
+        prefs.getString('languageCode')!, prefs.getString('countryCode'));
   }
 }
 
 class MainWidget extends StatefulWidget {
-  const MainWidget({Key? key}) : super(key: key);
+  bool needToWrap = true;
+
+  MainWidget({Key? key, required this.needToWrap}) : super(key: key);
 
   @override
-  State<MainWidget> createState() => _MainWidget();
+  State<MainWidget> createState() => _MainWidget(needToWrap);
 }
 
 class _MainWidget extends State<MainWidget> {
+  bool needToWrap = true;
   int _currentIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  _MainWidget(this.needToWrap);
 
   bool isToAdd = true;
 
@@ -57,6 +103,18 @@ class _MainWidget extends State<MainWidget> {
 
   @override
   Widget build(BuildContext context) {
+    return needToWrap
+        ? MaterialApp(
+            title: AppLocalizations.of(context)?.appName ?? '',
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            theme: ThemeData(
+                fontFamily: 'sans-serif-light', errorColor: Colors.red),
+            home: SafeArea(child: getMainContent()))
+        : getMainContent();
+  }
+
+  Scaffold getMainContent() {
     return _currentIndex == 0
         ? getTasksFragment()
         : (_currentIndex == 1 ? getMapFragment() : getSettingsFragment());
@@ -80,7 +138,8 @@ class _MainWidget extends State<MainWidget> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.fromLTRB(16.0, 16, 16, 0),
-                child: Text(AppLocalizations.of(context)?.drawerMenuTitleTime ?? '',
+                child: Text(
+                    AppLocalizations.of(context)?.drawerMenuTitleTime ?? '',
                     style:
                         TextStyle(color: CustomColors.notActive, fontSize: 24)),
               ),
@@ -114,7 +173,8 @@ class _MainWidget extends State<MainWidget> {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(16.0, 16, 16, 0),
-                child: Text(AppLocalizations.of(context)?.drawerMenuTitleCategory ?? '',
+                child: Text(
+                    AppLocalizations.of(context)?.drawerMenuTitleCategory ?? '',
                     style:
                         TextStyle(color: CustomColors.notActive, fontSize: 24)),
               ),
@@ -166,19 +226,33 @@ class _MainWidget extends State<MainWidget> {
       ),
       body: Column(children: [
         DropdownButton<String>(
-            items: <String>[AppLocalizations.of(context)?.russian ?? '', AppLocalizations.of(context)?.english ?? '']
-                .map<DropdownMenuItem<String>>((String value) {
+            items: <String>[
+              AppLocalizations.of(context)?.russian ?? '',
+              AppLocalizations.of(context)?.english ?? ''
+            ].map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value),
               );
             }).toList(),
             onChanged: (String? newValue) {
-              setState(() {});
+              changeLanguage(newValue == 'English' ? 'en' : 'ru');
             })
       ]),
       bottomNavigationBar: getMenu(),
     );
+  }
+
+  void changeLanguage(String? language) async {
+    var prefs = await SharedPreferences.getInstance();
+    if (prefs.getString('languageCode') != language) {
+      await prefs.setString('languageCode', language!);
+      await prefs.setString('countryCode', language.toUpperCase());
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MainPage()),
+      );
+    }
   }
 
   InkWell getCard(Task task) {
@@ -280,7 +354,8 @@ class _MainWidget extends State<MainWidget> {
                 style: TextStyle(color: CustomColors.colorHighlight))
           ])
         : Row(children: [
-            Text(Helper.parseDateForCard(task.date), style: TextStyle(color: CustomColors.inputColor))
+            Text(Helper.parseDateForCard(task.date),
+                style: TextStyle(color: CustomColors.inputColor))
           ]);
   }
 
@@ -312,7 +387,7 @@ class _MainWidget extends State<MainWidget> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => EditPage(
+            builder: (context) => EditWidget(
                   task: task,
                   categories: getCategories(),
                 )));
@@ -323,7 +398,7 @@ class _MainWidget extends State<MainWidget> {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => EditPage(
+            builder: (context) => EditWidget(
                   task: Task(
                       id: null,
                       name: "",

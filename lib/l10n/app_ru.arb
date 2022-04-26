@@ -42,7 +42,7 @@
   "contentHint": "Описание",
   "saveButton": "Сохранить",
   "russian": "Русский",
-  "english": "Английский",
+  "english": "English",
   "required": "Обязательное поле",
   "passwordError": "Пароли не совпадают"
 }
