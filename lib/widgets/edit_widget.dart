@@ -5,16 +5,21 @@ import '../helpers/theme.dart';
 import '../sqlite/task_model.dart';
 import '../utils/helper.dart';
 
-// class EditPage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//         title: 'Organizer',
-//         theme:
-//         ThemeData(fontFamily: 'sans-serif-light', errorColor: Colors.red),
-//         home: SafeArea(child: EditWidget()));
-//   }
-// }
+class EditPage extends StatelessWidget {
+  final Task task;
+  final List<String> categories;
+
+  EditPage({required this.task, required this.categories});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        title: 'Organizer',
+        theme:
+        ThemeData(fontFamily: 'sans-serif-light', errorColor: Colors.red),
+        home: SafeArea(child: EditWidget(task: task, categories: categories)));
+  }
+}
 
 class EditWidget extends StatefulWidget {
   final Task task;
@@ -48,7 +53,7 @@ class _EditWidget extends State<EditWidget> {
     categoryInputControl.text = task.category;
     dateInputControl.text = Helper.dateToString(_date);
     timeInputControl.text = Helper.timeToString(_time);
-    contentInputControl.text = task.name;
+    contentInputControl.text = task.content;
     isAdd = task.id == null;
   }
 
@@ -172,7 +177,7 @@ class _EditWidget extends State<EditWidget> {
                             icon: Icon(Icons.keyboard_arrow_down,
                                 color: CustomColors.colorHighlight),
                             itemBuilder: (BuildContext context) {
-                              return ["2", "3"].map((String choice) {
+                              return categories.map((String choice) {
                                 return PopupMenuItem<String>(
                                   value: choice,
                                   child: SizedBox(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../helpers/theme.dart';
 import '../sqlite/task_model.dart';
 import '../utils/helper.dart';
+import 'edit_widget.dart';
 
 class MainPage extends StatelessWidget {
   @override
@@ -10,7 +11,7 @@ class MainPage extends StatelessWidget {
     return MaterialApp(
         title: 'Organizer',
         theme:
-        ThemeData(fontFamily: 'sans-serif-light', errorColor: Colors.red),
+            ThemeData(fontFamily: 'sans-serif-light', errorColor: Colors.red),
         home: SafeArea(child: MainWidget()));
   }
 }
@@ -24,7 +25,7 @@ class MainWidget extends StatefulWidget {
 
 class _MainWidget extends State<MainWidget> {
   int _currentIndex = 0;
-  int _selectedDestination = 0;
+  String _selectedDestination = "";
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   bool isToAdd = true;
@@ -48,9 +49,10 @@ class _MainWidget extends State<MainWidget> {
         selected: false)
   ];
 
-  void selectDestination(int index) {
+  void selectDestination(String index) {
     setState(() {
       _selectedDestination = index;
+      _scaffoldKey.currentState?.openEndDrawer();
     });
   }
 
@@ -72,49 +74,47 @@ class _MainWidget extends State<MainWidget> {
             padding: EdgeInsets.zero,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.fromLTRB(16.0, 16, 16, 0),
                 child: Text(
-                  'Header',
+                  'Show by Period',
+                  style: TextStyle(color: CustomColors.notActive, fontSize: 24)
                 ),
               ),
-              Divider(
-                height: 1,
-                thickness: 1,
+              ListTile(
+                title: Text('Overdue'),
+                onTap: () => selectDestination('Overdue'),
               ),
               ListTile(
-                leading: Icon(Icons.favorite),
-                title: Text('Item 1'),
-                selected: _selectedDestination == 0,
-                onTap: () => selectDestination(0),
+                title: Text('Next 24 hours'),
+                onTap: () => selectDestination('Next 24 hours'),
               ),
               ListTile(
-                leading: Icon(Icons.delete),
-                title: Text('Item 2'),
-                selected: _selectedDestination == 1,
-                onTap: () => selectDestination(1),
+                title: Text('Coming days'),
+                onTap: () => selectDestination('Coming days'),
               ),
               ListTile(
-                leading: Icon(Icons.label),
-                title: Text('Item 3'),
-                selected: _selectedDestination == 2,
-                onTap: () => selectDestination(2),
+                title: Text('Week'),
+                onTap: () => selectDestination('Week'),
+              ),
+              ListTile(
+                title: Text('Month'),
+                onTap: () => selectDestination('Month'),
+              ),
+              ListTile(
+                title: Text('Future'),
+                onTap: () => selectDestination('Future'),
               ),
               Divider(
                 height: 1,
                 thickness: 1,
               ),
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.fromLTRB(16.0, 16, 16, 0),
                 child: Text(
-                  'Label',
+                  'Show by Period',  style: TextStyle(color: CustomColors.notActive, fontSize: 24)
                 ),
               ),
-              ListTile(
-                leading: Icon(Icons.bookmark),
-                title: Text('Item A'),
-                selected: _selectedDestination == 3,
-                onTap: () => selectDestination(3),
-              ),
+              ...getDynamicallyListTileList()
             ],
           ),
         ),
@@ -133,7 +133,6 @@ class _MainWidget extends State<MainWidget> {
           selectedLabelStyle: TextStyle(color: Colors.white),
           unselectedLabelStyle: TextStyle(color: CustomColors.notActive),
           onTap: (value) {
-            // Respond to item press.
             setState(() => _currentIndex = value);
           },
           items: [
@@ -155,7 +154,7 @@ class _MainWidget extends State<MainWidget> {
           backgroundColor: CustomColors.secondaryColor,
           foregroundColor: Colors.white,
           onPressed: () {
-            // Respond to button press
+            onFloatButtonClick();
           },
           child: Icon(isToAdd ? Icons.add : Icons.delete),
         ));
@@ -163,10 +162,8 @@ class _MainWidget extends State<MainWidget> {
 
   InkWell getCard(Task task) {
     return InkWell(
-        onTap: () => {},
-        onLongPress: () => {
-        onCardLongClick(task)
-    },
+        onTap: () => {onCardClick(task)},
+        onLongPress: () => {onCardLongClick(task)},
         splashColor: CustomColors.colorHighlight,
         child: Card(
           color: task.selected ? CustomColors.selectedCard : Colors.white,
@@ -200,7 +197,7 @@ class _MainWidget extends State<MainWidget> {
                                   style: TextStyle(fontSize: 20)))),
                       task.selected
                           ? Icon(Icons.check_circle_sharp,
-                          color: CustomColors.selectedCardIcon)
+                              color: CustomColors.selectedCardIcon)
                           : SizedBox.shrink()
                     ],
                   ),
@@ -223,17 +220,28 @@ class _MainWidget extends State<MainWidget> {
   Row getSubtitle(Task task) {
     return task.category.isNotEmpty
         ? Row(children: [
-      Text(task.date, style: TextStyle(color: CustomColors.inputColor)),
-      Padding(
-        padding: EdgeInsets.fromLTRB(10, 0, 2, 0),
-        child: Icon(Icons.bookmark, color: CustomColors.secondaryColor),
-      ),
-      Text(task.category,
-          style: TextStyle(color: CustomColors.colorHighlight))
-    ])
+            Text(task.date, style: TextStyle(color: CustomColors.inputColor)),
+            Padding(
+              padding: EdgeInsets.fromLTRB(10, 0, 2, 0),
+              child: Icon(Icons.bookmark, color: CustomColors.secondaryColor),
+            ),
+            Text(task.category,
+                style: TextStyle(color: CustomColors.colorHighlight))
+          ])
         : Row(children: [
-      Text(task.date, style: TextStyle(color: CustomColors.inputColor))
-    ]);
+            Text(task.date, style: TextStyle(color: CustomColors.inputColor))
+          ]);
+  }
+
+  List<ListTile> getDynamicallyListTileList() {
+    List<ListTile> categories = <ListTile>[];
+    getCategories().forEach((element) {
+      categories.add(ListTile(
+        title: Text(element),
+        onTap: () => selectDestination(element),
+      ));
+    });
+    return categories;
   }
 
   void onCheckBoxClick(Task task) {
@@ -247,5 +255,42 @@ class _MainWidget extends State<MainWidget> {
     firstWhere.selected = !firstWhere.selected;
     isToAdd = !tasks.any((element) => element.selected);
     setState(() {});
+  }
+
+  void onCardClick(Task task) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+        builder: (context) => EditPage(
+      task: task,
+      categories: getCategories(),
+    )));
+  }
+
+  void onFloatButtonClick() {
+    if (isToAdd) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => EditPage(
+              task: Task(
+                  id: null,
+                  name: "",
+                  category: "",
+                  date: Helper.fullDateToString(DateTime.now()),
+                  content: "",
+                  done: "false",
+                  selected: false),
+              categories: getCategories(),
+            )),
+      );
+    }
+  }
+
+  List<String> getCategories() {
+    return tasks.where((e) => e.category.isNotEmpty).map((e) {
+      var trim = e.category.toLowerCase().trim();
+      return trim[0].toUpperCase() + trim.substring(1);
+    }).toSet().toList();
   }
 }
