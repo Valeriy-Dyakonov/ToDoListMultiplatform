@@ -96,6 +96,7 @@ class _EditWidget extends State<EditWidget> {
     if (newDate != null) {
       setState(() {
         _date = newDate;
+        dateInputControl.text = Helper.dateToString(_date);
       });
     }
   }
@@ -114,6 +115,7 @@ class _EditWidget extends State<EditWidget> {
     if (newTime != null) {
       setState(() {
         _time = newTime;
+        timeInputControl.text = Helper.timeToString(_time);
       });
     }
   }

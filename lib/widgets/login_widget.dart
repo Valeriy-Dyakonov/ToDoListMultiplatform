@@ -44,7 +44,7 @@ class _LoginWidget extends State<LoginWidget> {
   void _onItemTapped(int index) {
     setState(() {
       if (index == 0 &&
-          passwordValid == ValidationErrors.passwords_not_equals) {
+          passwordValid == ValidationErrors.passwordsNotEquals) {
         passwordValid = null;
         repeatPasswordValid = null;
       }
@@ -67,13 +67,13 @@ class _LoginWidget extends State<LoginWidget> {
         ? ((_selectedIndex == 0 ||
                 passwordController.text == repeatPasswordController.text)
             ? null
-            : ValidationErrors.passwords_not_equals)
+            : ValidationErrors.passwordsNotEquals)
         : ValidationErrors.required;
     if (validate != passwordValid) {
       setState(() {
         passwordValid = validate;
         if (_selectedIndex == 1 &&
-            (validate == ValidationErrors.passwords_not_equals ||
+            (validate == ValidationErrors.passwordsNotEquals ||
                 validate == null)) {
           repeatPasswordValid = validate;
         }
@@ -86,13 +86,13 @@ class _LoginWidget extends State<LoginWidget> {
         ? ((_selectedIndex == 0 ||
                 passwordController.text == repeatPasswordController.text)
             ? null
-            : ValidationErrors.passwords_not_equals)
+            : ValidationErrors.passwordsNotEquals)
         : ValidationErrors.required;
     if (validate != repeatPasswordValid) {
       setState(() {
         repeatPasswordValid = validate;
         if (_selectedIndex == 1 &&
-            (validate == ValidationErrors.passwords_not_equals ||
+            (validate == ValidationErrors.passwordsNotEquals ||
                 validate == null)) {
           passwordValid = validate;
         }

@@ -26,11 +26,11 @@ class MainWidget extends StatefulWidget {
 
 class _MainWidget extends State<MainWidget> {
   int _currentIndex = 0;
-  String _selectedDestination = "";
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   bool isToAdd = true;
 
+  List<Task> allTasks = <Task>[];
   List<Task> tasks = <Task>[];
 
   @override
@@ -39,14 +39,15 @@ class _MainWidget extends State<MainWidget> {
 
     DBProvider.db.getTasks().then((value) {
       setState(() {
-        tasks = value;
+        allTasks = value;
+        tasks = getListByType("Next 24 hours", value);
       });
     });
   }
 
-  void selectDestination(String index) {
+  void selectDestination(String type) {
     setState(() {
-      _selectedDestination = index;
+      tasks = getListByType(type, allTasks);
       _scaffoldKey.currentState?.openEndDrawer();
     });
   }
@@ -283,6 +284,7 @@ class _MainWidget extends State<MainWidget> {
       var toDelete = tasks.where((element) => element.selected).toList();
       DBProvider.db.deleteAll(toDelete).then((value) => setState(() {
         tasks = tasks.where((element) => !element.selected).toList();
+        allTasks = allTasks.where((element) => !element.selected).toList();
         isToAdd = true;
       }));
     }
@@ -290,8 +292,35 @@ class _MainWidget extends State<MainWidget> {
 
   List<String> getCategories() {
     return tasks.where((e) => e.category.isNotEmpty).map((e) {
-      var trim = e.category.toLowerCase().trim();
-      return trim[0].toUpperCase() + trim.substring(1);
+      return Helper.capitalizeString(e.category);
     }).toSet().toList();
+  }
+
+  List<Task> getListByType(String type, List<Task> list) {
+      switch (type) {
+        case "Overdue":
+          return list.where((element) => Helper.getDiffFromToday(element.date) < 0 && !Helper.parseBool(element.done)).toList();
+        case "Next 24 hours":
+          return list.where((element) => Helper.getDiffFromToday(element.date) == 0).toList();
+        case "Coming days":
+          return list.where((element) => Helper.getDiffFromToday(element.date) == 1).toList();
+        case "Week":
+          return list.where((element) {
+            var diffFromToday = Helper.getDiffFromToday(element.date);
+            return diffFromToday > 1 && diffFromToday <=7;
+          }).toList();
+        case "Month":
+          return list.where((element) {
+            var diffFromToday = Helper.getDiffFromToday(element.date);
+            return diffFromToday > 7 && diffFromToday <= 31;
+          }).toList();
+        case "Future":
+          return list.where((element) {
+            var diffFromToday = Helper.getDiffFromToday(element.date);
+            return diffFromToday > 31;
+          }).toList();
+        default:
+          return list.where((element) => Helper.capitalizeString(element.category) == type).toList();
+      }
   }
 }
