@@ -293,7 +293,7 @@ class _MainWidget extends State<MainWidget> {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     primary: CustomColors.secondaryColor,
-                    textStyle: const TextStyle(fontSize: 16),
+                    textStyle: const TextStyle(fontSize: 16 ),
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(8)),
                     )),
