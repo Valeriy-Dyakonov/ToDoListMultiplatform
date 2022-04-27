@@ -1,15 +1,3 @@
-import 'dart:convert';
-
-Task clientFromJson(String str) {
-  final jsonData = json.decode(str);
-  return Task.fromMap(jsonData);
-}
-
-String clientToJson(Task data) {
-  final dyn = data.toMap();
-  return json.encode(dyn);
-}
-
 class Task {
   int? id;
   String name;
