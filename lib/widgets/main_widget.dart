@@ -87,6 +87,7 @@ class _MainWidget extends State<MainWidget> {
 
   List<Task> allTasks = <Task>[];
   List<Task> tasks = <Task>[];
+  List<LatLng> points = <LatLng>[];
 
   Completer<GoogleMapController> _controllerGoogleMap = Completer();
   late GoogleMapController googleMapController;
@@ -260,16 +261,45 @@ class _MainWidget extends State<MainWidget> {
             myLocationButtonEnabled: true,
             myLocationEnabled: true,
             mapType: MapType.normal,
+            polylines: {
+              Polyline(
+                polylineId: const PolylineId('overview_polyline'),
+                color: Colors.red,
+                width: 5,
+                points: points,
+              ),
+            },
             onMapCreated: (GoogleMapController controller) {
               _controllerGoogleMap.complete(controller);
               googleMapController = controller;
               locatePosition();
             },
-          )
+            onLongPress: addPoint,
+          ),
         ],
       ),
+      floatingActionButton: addClearButton(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       bottomNavigationBar: getMenu(),
     );
+  }
+
+  clearPoints() {
+    points.clear();
+    setState(() {});
+  }
+
+  addPoint(LatLng pos) {
+    points.add(pos);
+    setState(() {});
+  }
+
+  addClearButton() {
+    return points.length > 1 ? FloatingActionButton(
+      onPressed: clearPoints,
+      child: const Icon(Icons.clear),
+      backgroundColor: CustomColors.colorHighlight,
+    ) : null;
   }
 
   Scaffold getSettingsFragment() {
@@ -293,7 +323,7 @@ class _MainWidget extends State<MainWidget> {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     primary: CustomColors.secondaryColor,
-                    textStyle: const TextStyle(fontSize: 16 ),
+                    textStyle: const TextStyle(fontSize: 16),
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(8)),
                     )),
