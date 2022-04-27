@@ -8,12 +8,12 @@ class Helper {
   static const String dateWithTimeForCard = "dd MMM yyyy HH:mm";
   static const String date = "dd/MM/yyyy";
 
-  static parseBool(String value) {
-    return value.toLowerCase() == 'true';
-  }
-
   static boolToString(bool value) {
     return value ? 'true' : 'false';
+  }
+
+  static parseBool(String value) {
+    return value.toLowerCase() == 'true';
   }
 
   static parseDateForCard(String datetime) {
