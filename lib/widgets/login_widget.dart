@@ -335,6 +335,7 @@ class _LoginWidget extends State<LoginWidget> {
                   child: Padding(
                       padding: const EdgeInsets.only(top: 65),
                       child: ElevatedButton(
+                        key: Key("toRegister"),
                         style: ElevatedButton.styleFrom(
                             minimumSize: Size(130, 46),
                             primary: CustomColors.colorHighlight,
@@ -426,6 +427,7 @@ class _LoginWidget extends State<LoginWidget> {
               Padding(
                   padding: const EdgeInsets.only(top: 16),
                   child: ElevatedButton(
+                    key: Key("SignIn"),
                     style: ElevatedButton.styleFrom(
                         minimumSize: Size(200, 46),
                         primary: CustomColors.secondaryColor,
@@ -739,6 +741,7 @@ class _LoginWidget extends State<LoginWidget> {
                   child: Padding(
                       padding: const EdgeInsets.fromLTRB(200, 8, 8, 8),
                       child: ElevatedButton(
+                        key: Key("toRegister"),
                         style: ElevatedButton.styleFrom(
                             minimumSize: Size(200, 46),
                             primary: CustomColors.primaryColor,

@@ -393,6 +393,7 @@ class _EditWidget extends State<EditWidget> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Center(
+            key: Key("edit_page"),
             child: Column(children: [
           Padding(
               padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),

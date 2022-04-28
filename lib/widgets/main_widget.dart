@@ -243,6 +243,7 @@ class _MainWidget extends State<MainWidget> {
         }),
         bottomNavigationBar: getMenu(),
         floatingActionButton: FloatingActionButton(
+          key: Key("addTask"),
           backgroundColor: CustomColors.secondaryColor,
           foregroundColor: Colors.white,
           onPressed: () {
@@ -447,6 +448,7 @@ class _MainWidget extends State<MainWidget> {
 
   BottomNavigationBar getMenu() {
     return BottomNavigationBar(
+      key: Key('menu'),
       type: BottomNavigationBarType.fixed,
       currentIndex: _currentIndex,
       backgroundColor: CustomColors.secondaryColor,
