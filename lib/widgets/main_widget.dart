@@ -302,8 +302,8 @@ class _MainWidget extends State<MainWidget> {
 
   trackingSteps() {
     points.clear();
-    location.onLocationChanged().timeout(Duration(milliseconds: 1000)).takeWhile((element) => trackSteps).listen((locationData) async {
-      var latLng = LatLng(locationData.latitude, locationData.longitude);
+    location.onLocationChanged.timeout(Duration(milliseconds: 1000)).takeWhile((element) => trackSteps).listen((locationData) async {
+      var latLng = LatLng(locationData.latitude!, locationData.longitude!);
       if (points.isEmpty || points.last != latLng) {
         points.add(latLng);
         setState(() {});

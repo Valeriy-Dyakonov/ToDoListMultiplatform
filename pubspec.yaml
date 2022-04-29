@@ -52,7 +52,7 @@ dependencies:
   geolocator: ^8.2.0
   google_maps_flutter: ^2.1.3
   provider: ^3.0.0
-  location: ^2.3.5
+  location: ^4.0.0
 
 dev_dependencies:
   flutter_test:
@@ -80,7 +80,7 @@ dev_dependencies:
   geolocator: ^8.2.0
   google_maps_flutter: ^2.1.3
   provider: ^3.0.0
-  location: ^2.3.5
+  location: ^4.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
