@@ -15,9 +15,9 @@ void main() {
   });
   
   testWidgets("test auth interface to Register screen click", (WidgetTester tester) async {
-    var toRegisterScreen = find.byKey(ValueKey("toRegister"));
+    var toRegisterScreen = find.byKey(const ValueKey("toRegister"));
 
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(const MaterialApp(
         locale: Locale('en'),
         home: LoginWidget()));
     await tester.pump();

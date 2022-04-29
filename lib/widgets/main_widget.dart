@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:ios_android_flutter/main.dart';
 import 'package:ios_android_flutter/sqlite/provider.dart';
+import 'package:location/location.dart' as g;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helpers/theme.dart';
@@ -84,6 +85,7 @@ class _MainWidget extends State<MainWidget> {
   _MainWidget(this.needToWrap);
 
   bool isToAdd = true;
+  bool trackSteps = false;
 
   List<Task> allTasks = <Task>[];
   List<Task> tasks = <Task>[];
@@ -92,6 +94,7 @@ class _MainWidget extends State<MainWidget> {
   Completer<GoogleMapController> _controllerGoogleMap = Completer();
   late GoogleMapController googleMapController;
   late Position currentPosition;
+  late g.Location location;
 
   void locatePosition() async {
     LocationPermission permission;
@@ -101,9 +104,9 @@ class _MainWidget extends State<MainWidget> {
       if (permission == LocationPermission.deniedForever) {
         return Future.error('Location Not Available');
       }
-    } else {
-      throw Exception('Error');
     }
+
+    location = g.Location();
 
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
@@ -277,12 +280,35 @@ class _MainWidget extends State<MainWidget> {
             },
             onLongPress: addPoint,
           ),
+          Padding(padding: EdgeInsets.all(16),child: FloatingActionButton(
+            onPressed: () {
+              setState(() {
+                trackSteps = !trackSteps;
+                if (trackSteps) {
+                  trackingSteps();
+                }
+              });
+            },
+            backgroundColor: trackSteps ? Colors.red : Colors.green,
+            child: const Icon(Icons.navigation),
+          )),
         ],
       ),
       floatingActionButton: addClearButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       bottomNavigationBar: getMenu(),
     );
+  }
+
+  trackingSteps() {
+    points.clear();
+    location.onLocationChanged().timeout(Duration(milliseconds: 1000)).takeWhile((element) => trackSteps).listen((locationData) async {
+      var latLng = LatLng(locationData.latitude, locationData.longitude);
+      if (points.isEmpty || points.last != latLng) {
+        points.add(latLng);
+        setState(() {});
+      }
+    });
   }
 
   clearPoints() {

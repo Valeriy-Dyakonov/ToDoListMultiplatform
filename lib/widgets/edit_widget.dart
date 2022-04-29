@@ -164,7 +164,7 @@ class _EditWidget extends State<EditWidget> {
   }
 
   void navigateToMain() {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => MainWidget(needToWrap: false)),
     );
